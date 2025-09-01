@@ -28,4 +28,8 @@ module.exports = {
       endOfLine: 'auto',
     },
   ],
+<<<<<<< HEAD
 };
+=======
+};
+>>>>>>> 6dcc43e0bf955bdad546288025f4167ae969d41e
