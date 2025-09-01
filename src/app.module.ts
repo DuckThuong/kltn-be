@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { LoginModule } from './modules/login/login.module';
+import { LoginModule } from './modules/login_register/login_register.module';
 import { UserDefault } from './entities/userDefault.entity';
 import { UserInformation } from './entities/userInformation.entity';
 
@@ -18,7 +18,8 @@ imports: [
         UserDefault,
         UserInformation
       ],
-      synchronize: true,
+      synchronize: false,
+      autoLoadEntities: true,
       logging: false,
     }),
     LoginModule,
