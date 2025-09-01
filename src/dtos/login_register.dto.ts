@@ -28,7 +28,46 @@ export class LoginResponseDto {
     @IsBoolean()
     @IsNotEmpty()
     isAdmin: boolean;
+
+    @ApiProperty({ description: 'Thông báo' })
+    @IsString()
+    @IsNotEmpty()
+    message: string;
+
+    @ApiProperty({ description: 'Thành công' })
+    @IsBoolean()
+    @IsNotEmpty()
+    success: boolean;
 }
+
+export class RegisterDto {
+    @ApiProperty({ description: 'Tên người dùng' })
+    @IsString()
+    @IsNotEmpty()
+    fullName: string;
+    
+    @ApiProperty({ description: 'Tên đăng nhập của người dùng' })
+    @IsString()
+    @IsNotEmpty()
+    username: string;
+
+    @ApiProperty({ description: 'Mật khẩu của người dùng' })
+    @IsString()
+    @IsNotEmpty()
+    password: string;
+}
+
+export class RegisterResponseDto {
+    @ApiProperty({ description: 'Thông báo' })
+    @IsString()
+    @IsNotEmpty()
+    message: string;
+
+    @ApiProperty({ description: 'Thành công' })
+    @IsBoolean()
+    @IsNotEmpty()
+    success: boolean;
+}   
 
 export class RefreshTokenResponseDto {
     @ApiProperty({ description: 'Access Token mới' })

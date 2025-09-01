@@ -1,6 +1,6 @@
 import { Controller, Post, Body, UseGuards, Get, Request } from '@nestjs/common';
 import { LoginService } from 'src/services/login_register.service';
-import { LoginDto, LoginResponseDto, RefreshTokenResponseDto, GetProfileResponseDto, ValidateTokenResponseDto } from 'src/dtos/login_register.dto';
+import { LoginDto, LoginResponseDto, RefreshTokenResponseDto, GetProfileResponseDto, ValidateTokenResponseDto, RegisterDto, RegisterResponseDto } from 'src/dtos/login_register.dto';
 import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
 import { ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
@@ -14,6 +14,14 @@ export class LoginController {
   @ApiResponse({ status: 200, type: LoginResponseDto })   
   public async login(@Body() loginDto: LoginDto): Promise<LoginResponseDto> {
     return this.loginService.doLogin(loginDto);
+  }
+
+  @Post('register')
+  @ApiOperation({ summary: 'Đăng ký' })
+  @ApiBody({ type: RegisterDto })
+  @ApiResponse({ status: 200, type: RegisterResponseDto })
+  public async register(@Body() registerDto: RegisterDto): Promise<RegisterResponseDto> {
+    return this.loginService.doRegister(registerDto);
   }
 
   @ApiOperation({ summary: 'Làm mới token' })

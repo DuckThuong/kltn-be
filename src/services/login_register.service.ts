@@ -1,5 +1,5 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { LoginDto, LoginResponseDto } from 'src/dtos/login_register.dto';
+import { LoginDto, LoginResponseDto, RegisterDto, RegisterResponseDto } from 'src/dtos/login_register.dto';
 import { UserDefault } from 'src/entities/userDefault.entity';
 import { UserInformation } from 'src/entities/userInformation.entity';
 import { Repository } from 'typeorm';
@@ -13,6 +13,11 @@ export class LoginService {
         private readonly jwtService: JwtServiceCustom,
     ) {}
 
+    /**
+     * Đăng nhập
+     * @param loginDto - Dữ liệu đăng nhập
+     * @returns Thông tin access token và refresh token
+     */
     public async doLogin(loginDto: LoginDto): Promise<LoginResponseDto> {
         const { username, password } = loginDto;
         const userDefault = await this.userDefaultRepository.findOne({ where: { username } });
@@ -36,8 +41,23 @@ export class LoginService {
         
         const { accessToken, refreshToken } = await this.jwtService.generateTokenPair(payload);
         
-        return { accessToken, refreshToken, isAdmin: userDefault.role === '1' };
+        return { accessToken, refreshToken, isAdmin: userDefault.role === '1', success: true, message: 'Đăng nhập thành công' };
     }
+
+    /**
+     * Đăng ký
+     * @param registerDto - Dữ liệu đăng ký
+     * @returns Thông tin đăng ký
+     */
+    public async doRegister(registerDto: RegisterDto): Promise<RegisterResponseDto> {
+        const { username, password, fullName } = registerDto;
+        const resgisterUser = await this.userDefaultRepository.findOne({ where: { username } });
+        if (resgisterUser) {
+            throw new UnauthorizedException('Tài khoản đã tồn tại');
+        }
+        const userDefault = await this.userDefaultRepository.save({ username, password, fullName });
+        return { success: true, message: 'Đăng ký thành công' };
+    }   
 
     /**
      * Làm mới access token từ refresh token
