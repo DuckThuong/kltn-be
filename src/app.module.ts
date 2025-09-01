@@ -1,9 +1,8 @@
 import { Module } from '@nestjs/common';
+import { DataSource } from 'typeorm';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
-<<<<<<< HEAD
-  imports: [],
-=======
 imports: [
     TypeOrmModule.forRoot({
       type: 'mysql',
@@ -18,7 +17,7 @@ imports: [
       synchronize: false,
       logging: false,
     }),
->>>>>>> 6dcc43e0bf955bdad546288025f4167ae969d41e
+  ],
   controllers: [],
   providers: [],
 })
