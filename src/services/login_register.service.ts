@@ -46,7 +46,7 @@ export class LoginService {
             
             const { accessToken, refreshToken } = await this.jwtService.generateTokenPair(payload);
             
-            return { accessToken, refreshToken, isAdmin: userDefault.role === ADMIN_ROLE, success: true, message: 'Đăng nhập thành công' };
+            return { accessToken, refreshToken, isAdmin: userDefault.role === ADMIN_ROLE, success: true, message: 'Đăng nhập thành công', isCustomer: userDefault.isCustomer };
         } catch (error) {
             throw error;
         }

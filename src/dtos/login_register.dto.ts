@@ -38,6 +38,11 @@ export class LoginResponseDto {
     @IsBoolean()
     @IsNotEmpty()
     success: boolean;
+    
+    @ApiProperty({ description: 'Khách hàng' })
+    @IsBoolean()
+    @IsNotEmpty()
+    isCustomer: boolean;
 }
 
 export class RegisterDto {
