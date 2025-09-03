@@ -8,40 +8,40 @@ export class UserInformation {
     @Column()
     userCd: string;
 
-    @Column()   
+    @Column({ nullable: true })   
     fullName: string;
 
-    @Column()
+    @Column({ nullable: true })
     email: string;
 
-    @Column()
+    @Column({ nullable: true })
     phone: string;
 
-    @Column()
+    @Column({ nullable: true })
     description: string;
 
-    @Column()
+    @Column({ nullable: true })
     province: string;
 
-    @Column()
+    @Column({ nullable: true })
     address: string;
 
-    @Column()
+    @Column({ nullable: true })
     country: string;
 
-    @Column()
+    @Column({ nullable: true })
     city: string;
 
-    @Column({ unique: true, length: 12 })
+    @Column({ unique: true, length: 12, nullable: true })
     cmnd: string;
 
-    @Column()
+    @Column({ nullable: true })
     dateOfBirth: Date;
 
-    @Column()
+    @Column({ nullable: true })
     gender: string;
 
-    @Column()
+    @Column({ nullable: true })
     avatar: string;
 
     @CreateDateColumn({ type: 'timestamp' })

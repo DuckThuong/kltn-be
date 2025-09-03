@@ -3,12 +3,16 @@ import { LoginDto, LoginResponseDto, RegisterDto, RegisterResponseDto } from 'sr
 import { UserDefault } from 'src/entities/userDefault.entity';
 import { UserInformation } from 'src/entities/userInformation.entity';
 import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 import { JwtServiceCustom } from './jwtService.services';
+import { ADMIN_ROLE, USER_ROLE } from 'src/config/constant';
 
 @Injectable()
 export class LoginService {
     constructor(
+        @InjectRepository(UserDefault)
         private readonly userDefaultRepository: Repository<UserDefault>,
+        @InjectRepository(UserInformation)
         private readonly userInformationRepository: Repository<UserInformation>,
         private readonly jwtService: JwtServiceCustom,
     ) {}
@@ -19,29 +23,33 @@ export class LoginService {
      * @returns Thông tin access token và refresh token
      */
     public async doLogin(loginDto: LoginDto): Promise<LoginResponseDto> {
-        const { username, password } = loginDto;
-        const userDefault = await this.userDefaultRepository.findOne({ where: { username } });
-        
-        if (!userDefault) {
-            throw new UnauthorizedException('Tài khoản không tồn tại');
-        }
-        
-        if (!userDefault.isActive) {
-            throw new UnauthorizedException('Tài khoản đã bị khóa');
-        }
-        
-        if (userDefault.password !== password) {
-            throw new UnauthorizedException('Mật khẩu không chính xác');
-        }
+        try {
+            const { username, password } = loginDto;
+            const userDefault = await this.userDefaultRepository.findOne({ where: { username } });
+            
+            if (!userDefault) {
+                throw new UnauthorizedException('Tài khoản không tồn tại');
+            }
+            
+            if (!userDefault.isActive) {
+                throw new UnauthorizedException('Tài khoản đã bị khóa');
+            }
+            
+            if (userDefault.password !== password) {
+                throw new UnauthorizedException('Mật khẩu không chính xác');
+            }
 
-        const payload = { 
-            userCd: userDefault.userCd, 
-            username: userDefault.username 
-        };
-        
-        const { accessToken, refreshToken } = await this.jwtService.generateTokenPair(payload);
-        
-        return { accessToken, refreshToken, isAdmin: userDefault.role === '1', success: true, message: 'Đăng nhập thành công' };
+            const payload = { 
+                userCd: userDefault.userCd, 
+                username: userDefault.username 
+            };
+            
+            const { accessToken, refreshToken } = await this.jwtService.generateTokenPair(payload);
+            
+            return { accessToken, refreshToken, isAdmin: userDefault.role === ADMIN_ROLE, success: true, message: 'Đăng nhập thành công' };
+        } catch (error) {
+            throw error;
+        }
     }
 
     /**
@@ -50,13 +58,30 @@ export class LoginService {
      * @returns Thông tin đăng ký
      */
     public async doRegister(registerDto: RegisterDto): Promise<RegisterResponseDto> {
-        const { username, password, fullName } = registerDto;
-        const resgisterUser = await this.userDefaultRepository.findOne({ where: { username } });
-        if (resgisterUser) {
-            throw new UnauthorizedException('Tài khoản đã tồn tại');
+        try {
+            const { username, password, fullName } = registerDto;
+            const resgisterUser = await this.userDefaultRepository.findOne({ where: { username } });
+            if (resgisterUser) {
+                throw new UnauthorizedException('Tài khoản đã tồn tại');
+            }
+            const userCd = Array.from({length: 12}, () => Math.floor(Math.random() * 10)).join('');
+            const userDefault = new UserDefault();
+            userDefault.userCd = userCd;
+            userDefault.username = username;
+            userDefault.password = password;
+            userDefault.role = USER_ROLE; 
+            userDefault.isActive = true;
+
+            const userInformation = new UserInformation();
+            userInformation.userCd = userCd;
+            userInformation.fullName = fullName;
+            
+            await this.userDefaultRepository.save(userDefault);
+            await this.userInformationRepository.save(userInformation);
+            return { success: true, message: 'Đăng ký thành công' };
+        } catch (error) {
+            throw error;
         }
-        const userDefault = await this.userDefaultRepository.save({ username, password, fullName });
-        return { success: true, message: 'Đăng ký thành công' };
     }   
 
     /**
