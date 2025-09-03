@@ -71,6 +71,7 @@ export class LoginService {
             userDefault.password = password;
             userDefault.role = USER_ROLE; 
             userDefault.isActive = true;
+            userDefault.isCustomer = false;
 
             const userInformation = new UserInformation();
             userInformation.userCd = userCd;

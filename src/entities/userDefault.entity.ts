@@ -20,6 +20,9 @@ export class UserDefault {
     @Column()
     isActive: boolean;
 
+    @Column()
+    isCustomer: boolean;
+
     @CreateDateColumn({ type: 'timestamp' })
     createdAt: Date;
 
