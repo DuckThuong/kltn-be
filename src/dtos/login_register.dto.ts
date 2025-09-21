@@ -5,7 +5,7 @@ export class LoginDto {
     @ApiProperty({ description: 'Tên đăng nhập của người dùng' })
     @IsString()
     @IsNotEmpty()
-    username: string;
+    email: string;
 
     @ApiProperty({ description: 'Mật khẩu của người dùng' })
     @IsString()
@@ -38,11 +38,7 @@ export class LoginResponseDto {
     @IsBoolean()
     @IsNotEmpty()
     success: boolean;
-    
-    @ApiProperty({ description: 'Khách hàng' })
-    @IsBoolean()
-    @IsNotEmpty()
-    isCustomer: boolean;
+
 }
 
 export class RegisterDto {
@@ -54,7 +50,7 @@ export class RegisterDto {
     @ApiProperty({ description: 'Tên đăng nhập của người dùng' })
     @IsString()
     @IsNotEmpty()
-    username: string;
+    email: string;
 
     @ApiProperty({ description: 'Mật khẩu của người dùng' })
     @IsString()

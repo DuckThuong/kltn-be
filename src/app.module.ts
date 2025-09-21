@@ -2,8 +2,12 @@ import { Module } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { LoginModule } from './modules/login_register/login_register.module';
-import { UserDefault } from './entities/userDefault.entity';
-import { UserInformation } from './entities/userInformation.entity';
+import { DfUser } from './entity/user/df_user.entity';
+import { DfUserRole } from './entity/user/df_user_role.entity';
+import { DfRole } from './entity/user/df_role.entity';
+import { MsRender } from './entity/user/ms_render.entity';
+import { TbUser } from './entity/user/tb_user.entity';
+import { TbPayment } from './entity/tb_payment.entity';
 
 @Module({
 imports: [
@@ -15,8 +19,13 @@ imports: [
       password: '123456',
       database: 'kltn',
       entities: [
-        UserDefault,
-        UserInformation
+        DfUser,
+        DfUserRole,
+        DfRole,
+        MsRender,
+        TbUser,
+        TbPayment
+
       ],
       synchronize: false,
       autoLoadEntities: true,
